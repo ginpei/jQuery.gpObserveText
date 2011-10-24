@@ -1,0 +1,126 @@
+<!DOCTYPE HTML>
+
+<!-- There are JavaScript sample codes in bottom. -->
+
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>jQuery.gpObserveText</title>
+  <style type="text/css">
+body {
+    font-family: "Times", "Times New Roman", serif;
+}
+pre {
+    background-color: #fffff0;
+    border: ridge 2px;
+    display: inline-block;
+    font-family: 'Courier', 'Courier New', monospace;
+    padding: 1em;
+}
+
+#name-check {
+    color: #c00;
+}
+#password-strength.weak {
+    background-color: #f00;
+    color: #fff;
+}
+#password-strength.normal {
+    background-color: #ff0;
+}
+#password-strength.strong {
+    background-color: #cfc;
+}
+  </style>
+</head>
+<body>
+  <h1>jQuery.gpObserveText</h1>
+  <div id="main">
+    <p>Fire <code>textchange</code> event when text value will be changed.</p>
+    <p>for: IE 6+, Firefox, Chrome, Safari, Opera</p>
+    <p>
+      <pre>$(elem).gpObserveText();</pre>
+    </p>
+    <p>
+      See sample codes in HTML source,<br />
+      and more informations in: <a href="http://ginpen.com/jquery/gpobservetext/">Ginpen.com</a>.
+    </p>
+  </div>
+  <p>
+  <label>Account: <input id="name" type="text" value="" /></label> (4-12) <span id="name-check"></span><br />
+  <label>Password: <input id="password" type="password" value="" /></label> <span id="password-strength"></span><br />
+  <span id="count">0</span>/140<br />
+  <textarea id="comment" rows="10" cols="30"></textarea>
+  </p>
+  <div>
+    <script src="jquery-1.6.2.min.js"></script>
+    <script src="../jquery.gpobservetext-1.0.js"></script>
+    <script>
+(function() {
+    // start observing
+    $(':text, :password, textarea').gpObserveText();
+
+    // name length
+    $('#name').bind('textchange', function(event, lastValue) {
+        var len = $(this).val().length;
+        if (len < 4) {
+            $('#name-check').text('too short');
+        }
+        else if (len > 12) {
+            $('#name-check').text('too long');
+        }
+        else {
+            $('#name-check').text('');
+        }
+    });
+
+    // password strength
+    $('#password').bind('textchange', function(event, lastValue) {
+        var val = $(this).val();
+        var strength = getStrength(val);
+        $('#password-strength')
+            .removeClass('strong normal weak')
+            .addClass(strength)
+            .text(strength);
+    });
+
+    function getStrength(val) {
+        // NEVER BELIEVE ME!
+
+        var pt = val.length;
+        if (/[a-z]/.test(val)) {
+            pt += 10;
+        }
+        if (/[A-Z]/.test(val)) {
+            pt += 10;
+        }
+        if (/[0-9]/.test(val)) {
+            pt += 10;
+        }
+        if (/[!"#$%&'()-^\\=~|@\[`{;:\]+*},\.\/_<>?_]/.test(val)) {
+            pt += 30;
+        }
+
+        var result;
+        if (pt >= 60) {
+            result = 'strong';
+        }
+        else if (pt >= 20) {
+            result = 'normal';
+        }
+        else {
+            result = 'weak';
+        }
+
+        return result;
+    }
+
+    // comment length
+    $('#comment').bind('textchange', function(event, lastValue) {
+        $('#count').text($(this).val().length);
+    });
+}());
+    </script>
+  </div>
+</body>
+</html>
