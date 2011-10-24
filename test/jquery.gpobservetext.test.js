@@ -73,6 +73,21 @@ test('fire', 2, function() {
   gpObserveText._fire($el);
 });
 
+test('set value', 1, function() {
+  $el = $('<textarea />').val('first');
+  gpObserveText.startObserving($el);
+  $el.one('textchange', function(event, lastValue) {
+    ok(false, 'typical');
+    start();
+  });
+  setTimeout(function() {
+    equal($el.val(), 'second', 'typical');
+    start();
+  }, 500);
+  gpObserveText.setValue($el, 'second');
+  stop();
+});
+
 // --------------------------------
 
 module('jQuery interface');
@@ -118,4 +133,11 @@ test('destroy', function() {
   ok($el.data('gpObserveText.timer'), 'start');
   $el.gpObserveText('destroy');
   ok(!$el.data('gpObserveText.timer'), 'stop');
+});
+
+test('set', function() {
+  $el = $('<textarea />').val('first');
+  $el.gpObserveText();
+  $el.gpObserveText('set', 'second');
+  equal($el.val(), 'second', 'typical');
 });

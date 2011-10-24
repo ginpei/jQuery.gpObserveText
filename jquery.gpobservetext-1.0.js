@@ -37,10 +37,10 @@
          * @param {HtmlElement} $el The target.
          * @param {Function} [listener] Event listener.
          */
-        exec: function($el, listener) {
+        exec: function($el, listener, param) {
             if (listener && this._isCommand(listener)) {
                 var command = listener;
-                this.runCommand($el, command);
+                this.runCommand($el, command, param);
             }
             else {
                 this.startObserving($el);
@@ -62,10 +62,14 @@
          * @param {HtmlElement} $el
          * @param {String} command
          */
-        runCommand: function($el, command) {
+        runCommand: function($el, command, param) {
             switch (command) {
                 case 'destroy':
                     this.stopObserving($el);
+                    break;
+
+                case 'set':
+                    this.setValue($el, param);
                     break;
             }
         },
@@ -132,13 +136,24 @@
             $el.data('gpObserveText.lastValue', value);
         },
 
+        /**
+         * Set value without firing.
+         * @param {HtmlElement} $el
+         * @param {String} value
+         */
+        setValue: function($el, value) {
+            $el
+              .data('gpObserveText.lastValue', value)
+              .val(value);
+        },
+
         banpei: null
     };
 
     // jQuery method interface
-    $.fn.gpObserveText = function(settings) {
+    $.fn.gpObserveText = function(listener, param) {
         return this.each(function(i, el) {
-            gpObserveText.exec($(el), settings);
+            gpObserveText.exec($(el), listener, param);
         });
     };
 
