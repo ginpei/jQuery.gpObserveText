@@ -1,6 +1,6 @@
-jQuery.gpHatebuCounter 1.0
-http://ginpen.com/jquery/gphatebucounter/
-https://github.com/ginpei/jQuery.gpHatebuCounter
+jQuery.gpObserveText 1.0
+http://ginpen.com/jquery/gpobservetext/
+https://github.com/ginpei/jQuery.gpObserveText
 
 Copyright (c) 2011 Takanashi Ginpei
 http://ginpen.com
